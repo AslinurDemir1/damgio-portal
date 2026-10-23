@@ -1,4 +1,6 @@
 using Damgio.Infrastructure;
+using Damgio.Infrastructure.Data;
+
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +28,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+// Uygulama başlarken Seeder'ı tetikle
+await DbSeeder.SeedAsync(app.Services);
 
 if (app.Environment.IsDevelopment())
 {
