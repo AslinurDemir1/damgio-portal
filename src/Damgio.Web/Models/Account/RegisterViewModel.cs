@@ -10,6 +10,7 @@ public class RegisterViewModel
 
     [Required(ErrorMessage = "E-posta alanı zorunludur.")]
     [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi giriniz.")]
+    [Display(Name = "E-posta")]
     public string Email { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Telefon numarası zorunludur.")]
