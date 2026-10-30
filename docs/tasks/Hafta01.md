@@ -16,12 +16,12 @@
 
 Branch: `feat/identity-roles` → PR → Aslınur review eder.
 
-- [ ] `Damgio.Core/Constants/Roles.cs` içindeki rolleri (`Admin`, `Cashier`, `Customer`) uygulama açılışında oluşturan seed (`RoleManager`)
-- [ ] Geliştirme ortamı için bir demo Admin kullanıcısı (şifre `user-secrets`'tan okunur, koda yazılmaz)
-- [ ] `AccountController`: Register (yeni kullanıcı → `Customer` rolü), Login, Logout
-- [ ] `RegisterViewModel` / `LoginViewModel` — DataAnnotations doğrulama (zorunlu alan, e-posta, telefon, şifre uzunluğu, şifre tekrarı)
-- [ ] Görünümler: `Views/Account/Login.cshtml`, `Register.cshtml`; navbar'da giriş/çıkış durumu
-- [ ] `[Authorize(Roles = Roles.Admin)]` ile korunan boş bir `/Admin` sayfası — rol kontrolünün çalıştığını videoda göstermek için
+- [x] `Damgio.Core/Constants/Roles.cs` içindeki rolleri (`Admin`, `Cashier`, `Customer`) uygulama açılışında oluşturan seed (`RoleManager`)
+- [x] Geliştirme ortamı için bir demo Admin kullanıcısı (şifre `user-secrets`'tan okunur, koda yazılmaz)
+- [x] `AccountController`: Register (yeni kullanıcı → `Customer` rolü), Login, Logout
+- [x] `RegisterViewModel` / `LoginViewModel` — DataAnnotations doğrulama (zorunlu alan, e-posta, telefon, şifre uzunluğu, şifre tekrarı)
+- [x] Görünümler: `Views/Account/Login.cshtml`, `Register.cshtml`; navbar'da giriş/çıkış durumu
+- [x] `[Authorize(Roles = Roles.Admin)]` ile korunan boş bir `/Admin` sayfası — rol kontrolünün çalıştığını videoda göstermek için
 
 İpucu: `Program.cs` içinde Identity zaten `AddIdentity<AppUser, IdentityRole>()` ile kayıtlı; cookie yolları `/Account/Login` olarak ayarlı.
 

@@ -94,7 +94,7 @@ Error codes: `UNAUTHENTICATED`, `PERMISSION_DENIED`, `NOT_FOUND`, `SHOP_INACTIVE
 - [x] ≥ 4–5 tables, ≥ 1 one-to-many
 - [ ] Web API full CRUD + Swagger (W3)
 - [ ] Form validation (W2)
-- [ ] Login + ≥ 2 roles (W1–W2, Zehra)
+- [x] Login + ≥ 2 roles (W1–W2, Zehra)
 - [ ] Admin panel (W3–W7)
 - [ ] Mobile-friendly UI (W4, W8)
 - [x] README with setup + migration steps

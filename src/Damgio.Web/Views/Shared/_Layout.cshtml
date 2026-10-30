@@ -40,9 +40,6 @@
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole(Roles.Admin))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Yönetim</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Shops" asp-action="Index">İşletmeler</a>
                             </li>
                             <li class="nav-item">
