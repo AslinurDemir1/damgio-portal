@@ -1,0 +1,67 @@
+@model Damgio.Web.Models.Admin.ShopInputModel
+
+@{
+    ViewData["Title"] = "Yeni İşletme Ekle";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">İşletmeler</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Yeni Ekle</li>
+                </ol>
+            </nav>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3">
+                    <h2 class="h4 mb-0">Yeni İşletme Ekle</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-bold"></label>
+                            <input asp-for="Name" class="form-control" placeholder="Örn: Damgio Coffee Kadıköy" />
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Slug" class="form-label fw-bold"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">/s/</span>
+                                <input asp-for="Slug" class="form-control" placeholder="Boş bırakırsanız işletme adından otomatik üretilir" />
+                            </div>
+                            <div class="form-text">Boş bırakırsanız otomatik üretilir. Yalnızca küçük harf, rakam ve tire içerebilir.</div>
+                            <span asp-validation-for="Slug" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label fw-bold"></label>
+                            <textarea asp-for="Address" class="form-control" rows="3" placeholder="Örn: Caferağa Mah. Moda Cad. No: 12 Kadıköy/İstanbul"></textarea>
+                            <span asp-validation-for="Address" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4 form-check form-switch">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsActive" class="form-check-label"></label>
+                            <div class="form-text">Pasif işletmelerde müşteriler damga kartı açamaz.</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">İptal</a>
+                            <button type="submit" class="btn btn-primary px-4">Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

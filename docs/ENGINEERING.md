@@ -93,8 +93,8 @@ Error codes: `UNAUTHENTICATED`, `PERMISSION_DENIED`, `NOT_FOUND`, `SHOP_INACTIVE
 - [x] PostgreSQL + EF Core + migrations
 - [x] ≥ 4–5 tables, ≥ 1 one-to-many
 - [ ] Web API full CRUD + Swagger (W3)
-- [ ] Form validation (W2)
-- [ ] Login + ≥ 2 roles (W1–W2, Zehra)
+- [x] Form validation (W2)
+- [x] Login + ≥ 2 roles (W1–W2, Zehra)
 - [ ] Admin panel (W3–W7)
 - [ ] Mobile-friendly UI (W4, W8)
 - [x] README with setup + migration steps
@@ -103,6 +103,16 @@ Error codes: `UNAUTHENTICATED`, `PERMISSION_DENIED`, `NOT_FOUND`, `SHOP_INACTIVE
 ## 7. Work log
 
 Newest first.
+
+### 2026-10-31 — Week 2 completion: Admin CRUD for Shops and Programs (Aslınur & Zehra)
+
+- MVC Controllers: `ShopsController` and `ProgramsController` implemented with full CRUD operations (`Index`, `Create`, `Edit`, `Details`, `Delete`).
+- Form Validation: Client-side (jQuery Unobtrusive) and server-side (`ModelState.IsValid`) validation with localized Turkish messages across all forms.
+- URL Slug: Automatic slug generation, reserved route validation (`admin`, `api`, `login`, etc.) and database uniqueness checks.
+- Admin UI: Razor views created for Shops and Programs management; Admin Dashboard (`/Admin`) enhanced with shortcut cards.
+- Layout: Cleaned and integrated navigation bar with role-based visibility (`Roles.Admin`).
+- Verification: All Week 2 checklist items completed and verified.
+- **Next:** W3 — StampCards Web API (full CRUD with Swagger) + ShopMembers.
 
 ### 2026-10-22 — Week 1 skeleton (Aslınur)
 

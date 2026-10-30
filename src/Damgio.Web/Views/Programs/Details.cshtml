@@ -1,0 +1,67 @@
+@model Damgio.Core.Entities.LoyaltyProgram
+
+@{
+    ViewData["Title"] = Model.Name + " - Program Detayı";
+}
+
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Programlar</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h2 class="h5 mb-0">Damga Programı Bilgileri</h2>
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Aktif</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Pasif</span>
+                    }
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4 text-muted">Program Adı:</dt>
+                        <dd class="col-sm-8 fw-bold">@Model.Name</dd>
+
+                        <dt class="col-sm-4 text-muted">Bağlı İşletme:</dt>
+                        <dd class="col-sm-8">
+                            <a asp-controller="Shops" asp-action="Details" asp-route-id="@Model.ShopId" class="text-decoration-none">
+                                @Model.Shop?.Name
+                            </a>
+                        </dd>
+
+                        <dt class="col-sm-4 text-muted">Gerekli Damga:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-primary">@Model.RequiredStamps Damga</span>
+                        </dd>
+
+                        <dt class="col-sm-4 text-muted">Kazanılacak Ödül:</dt>
+                        <dd class="col-sm-8 text-success fw-bold">🎁 @Model.RewardName</dd>
+
+                        <dt class="col-sm-4 text-muted">Damga Soğuma Süresi:</dt>
+                        <dd class="col-sm-8">@Model.StampCooldownSeconds saniye (arka arkaya damga basılmasını engeller)</dd>
+
+                        <dt class="col-sm-4 text-muted">Kayıtlı Kart Sayısı:</dt>
+                        <dd class="col-sm-8">@Model.StampCards.Count müşteri kartı</dd>
+
+                        <dt class="col-sm-4 text-muted">Oluşturulma Tarihi:</dt>
+                        <dd class="col-sm-8">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+                    </dl>
+                </div>
+                <div class="card-footer bg-white d-flex gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">Düzenle</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-sm">Sil</a>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-sm ms-auto">Listeye Dön</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
