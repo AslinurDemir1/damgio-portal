@@ -104,6 +104,16 @@ Error codes: `UNAUTHENTICATED`, `PERMISSION_DENIED`, `NOT_FOUND`, `SHOP_INACTIVE
 
 Newest first.
 
+### 2026-10-30 — Week 2: Models, SlugHelper and Admin CRUD foundation (Aslınur)
+
+- Added `SlugHelper` in `Damgio.Core/Common` with Turkish transliteration (`ç->c`, `ğ->g`, `ı->i`, `ö->o`, `ş->s`, `ü->u`, `İ/I->i`) and reserved slug check (`admin`, `api`, `desk`, `s`, `account`, `login`, `swagger`).
+- Unit tests: `SlugHelperTests` added to `Damgio.Tests`.
+- Admin InputModels: `ShopInputModel`, `ProgramInputModel` created with comprehensive DataAnnotations validation.
+- Documentation: `docs/tasks/Hafta02.md` and video script `docs/videos/Hafta02.md` created.
+- UI: Added Admin navigation links (Management, Shops, Programs) in `_Layout.cshtml`.
+- **Left for Zehra (W2):** MVC CRUD Controllers (`ShopsController`, `ProgramsController`) with Razor views and client/server validation.
+- **Next:** Zehra's CRUD PR review and video demo recording.
+
 ### 2026-10-22 — Week 1 skeleton (Aslınur)
 
 - Solution: `Damgio.Core`, `Damgio.Infrastructure`, `Damgio.Web`, `Damgio.Tests` on .NET 10.
