@@ -1,4 +1,5 @@
-using Damgio.Core.Entities;
+
+using Damgio.Core.Constants;
 using Damgio.Infrastructure.Identity;
 using Damgio.Web.Models.Account;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +12,9 @@ public class AccountController : Controller
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
 
-    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    public AccountController(
+        UserManager<AppUser> userManager,
+        SignInManager<AppUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -28,15 +31,22 @@ public class AccountController : Controller
     // POST: /Account/Login
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
+    public async Task<IActionResult> Login(
+        LoginViewModel model,
+        string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl;
+
         if (!ModelState.IsValid)
         {
             return View(model);
         }
 
-        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+        var result = await _signInManager.PasswordSignInAsync(
+            model.Email,
+            model.Password,
+            model.RememberMe,
+            lockoutOnFailure: false);
 
         if (result.Succeeded)
         {
@@ -44,10 +54,14 @@ public class AccountController : Controller
             {
                 return Redirect(returnUrl);
             }
+
             return RedirectToAction("Index", "Home");
         }
 
-        ModelState.AddModelError(string.Empty, "Geçersiz e-posta veya şifre.");
+        ModelState.AddModelError(
+            string.Empty,
+            "Geçersiz e-posta veya şifre.");
+
         return View(model);
     }
 
@@ -80,10 +94,27 @@ public class AccountController : Controller
 
         if (result.Succeeded)
         {
-            // Kayıt olan herkese varsayılan olarak Customer rolü atanıyor
-            await _userManager.AddToRoleAsync(user, "Customer");
+            // Kayıt olan herkese varsayılan olarak Customer rolü atanıyor.
+            var roleResult = await _userManager.AddToRoleAsync(
+                user,
+                Roles.Customer);
+
+            if (!roleResult.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
+
+                foreach (var error in roleResult.Errors)
+                {
+                    ModelState.AddModelError(
+                        string.Empty,
+                        error.Description);
+                }
+
+                return View(model);
+            }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
+
             return RedirectToAction("Index", "Home");
         }
 

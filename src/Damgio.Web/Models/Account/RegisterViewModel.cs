@@ -19,11 +19,12 @@ public class RegisterViewModel
     public string PhoneNumber { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Şifre alanı zorunludur.")]
-    [MinLength(6, ErrorMessage = "Şifreniz en az 6 karakter olmalıdır.")]
+    [MinLength(8, ErrorMessage = "Şifreniz en az 8 karakter olmalıdır.")]
     [DataType(DataType.Password)]
     [Display(Name = "Şifre")]
     public string Password { get; set; } = string.Empty;
 
+    [Required(ErrorMessage = "Şifre tekrarı zorunludur.")]
     [DataType(DataType.Password)]
     [Display(Name = "Şifre Tekrar")]
     [Compare("Password", ErrorMessage = "Şifreler eşleşmiyor.")]
