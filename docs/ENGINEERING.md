@@ -93,7 +93,7 @@ Error codes: `UNAUTHENTICATED`, `PERMISSION_DENIED`, `NOT_FOUND`, `SHOP_INACTIVE
 - [x] PostgreSQL + EF Core + migrations
 - [x] ≥ 4–5 tables, ≥ 1 one-to-many
 - [ ] Web API full CRUD + Swagger (W3)
-- [ ] Form validation (W2)
+- [x] Form validation (W2)
 - [x] Login + ≥ 2 roles (W1–W2, Zehra)
 - [ ] Admin panel (W3–W7)
 - [ ] Mobile-friendly UI (W4, W8)
@@ -104,15 +104,15 @@ Error codes: `UNAUTHENTICATED`, `PERMISSION_DENIED`, `NOT_FOUND`, `SHOP_INACTIVE
 
 Newest first.
 
-### 2026-10-30 — Week 2: Models, SlugHelper and Admin CRUD foundation (Aslınur)
+### 2026-10-31 — Week 2 completion: Admin CRUD for Shops and Programs (Aslınur & Zehra)
 
-- Added `SlugHelper` in `Damgio.Core/Common` with Turkish transliteration (`ç->c`, `ğ->g`, `ı->i`, `ö->o`, `ş->s`, `ü->u`, `İ/I->i`) and reserved slug check (`admin`, `api`, `desk`, `s`, `account`, `login`, `swagger`).
-- Unit tests: `SlugHelperTests` added to `Damgio.Tests`.
-- Admin InputModels: `ShopInputModel`, `ProgramInputModel` created with comprehensive DataAnnotations validation.
-- Documentation: `docs/tasks/Hafta02.md` and video script `docs/videos/Hafta02.md` created.
-- UI: Added Admin navigation links (Management, Shops, Programs) in `_Layout.cshtml`.
-- **Left for Zehra (W2):** MVC CRUD Controllers (`ShopsController`, `ProgramsController`) with Razor views and client/server validation.
-- **Next:** Zehra's CRUD PR review and video demo recording.
+- MVC Controllers: `ShopsController` and `ProgramsController` implemented with full CRUD operations (`Index`, `Create`, `Edit`, `Details`, `Delete`).
+- Form Validation: Client-side (jQuery Unobtrusive) and server-side (`ModelState.IsValid`) validation with localized Turkish messages across all forms.
+- URL Slug: Automatic slug generation, reserved route validation (`admin`, `api`, `login`, etc.) and database uniqueness checks.
+- Admin UI: Razor views created for Shops and Programs management; Admin Dashboard (`/Admin`) enhanced with shortcut cards.
+- Layout: Cleaned and integrated navigation bar with role-based visibility (`Roles.Admin`).
+- Verification: All Week 2 checklist items completed and verified.
+- **Next:** W3 — StampCards Web API (full CRUD with Swagger) + ShopMembers.
 
 ### 2026-10-22 — Week 1 skeleton (Aslınur)
 

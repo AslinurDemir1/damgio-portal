@@ -1,0 +1,42 @@
+@model Damgio.Core.Entities.Shop
+
+@{
+    ViewData["Title"] = "İşletmeyi Sil";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-danger">
+                <div class="card-header bg-danger text-white py-3">
+                    <h2 class="h5 mb-0">İşletmeyi Silmek Üzeresiniz</h2>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Dikkat:</strong> Bu işletmeyi sildiğinizde, işletmeye bağlı <strong>@Model.Programs.Count</strong> damga programı ve ilişkili tüm müşteri kartları kalıcı olarak silinecektir!
+                    </div>
+
+                    <dl class="row mb-4">
+                        <dt class="col-sm-4 text-muted">İşletme Adı:</dt>
+                        <dd class="col-sm-8 fw-bold">@Model.Name</dd>
+
+                        <dt class="col-sm-4 text-muted">Slug:</dt>
+                        <dd class="col-sm-8"><code>/s/@Model.Slug</code></dd>
+
+                        <dt class="col-sm-4 text-muted">Adres:</dt>
+                        <dd class="col-sm-8">@(string.IsNullOrWhiteSpace(Model.Address) ? "Belirtilmemiş" : Model.Address)</dd>
+                    </dl>
+
+                    <form asp-action="Delete" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+                            <button type="submit" class="btn btn-danger px-4">Evet, İşletmeyi Sil</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

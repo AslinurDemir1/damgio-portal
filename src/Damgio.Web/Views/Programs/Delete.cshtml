@@ -1,0 +1,42 @@
+@model Damgio.Core.Entities.LoyaltyProgram
+
+@{
+    ViewData["Title"] = "Programı Sil";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-danger">
+                <div class="card-header bg-danger text-white py-3">
+                    <h2 class="h5 mb-0">Damga Programını Silmek Üzeresiniz</h2>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Dikkat:</strong> <strong>'@Model.Name'</strong> programını silmek üzeresiniz. Bu işlem geri alınamaz.
+                    </div>
+
+                    <dl class="row mb-4">
+                        <dt class="col-sm-4 text-muted">Program:</dt>
+                        <dd class="col-sm-8 fw-bold">@Model.Name</dd>
+
+                        <dt class="col-sm-4 text-muted">İşletme:</dt>
+                        <dd class="col-sm-8">@Model.Shop?.Name</dd>
+
+                        <dt class="col-sm-4 text-muted">Ödül:</dt>
+                        <dd class="col-sm-8">@Model.RewardName</dd>
+                    </dl>
+
+                    <form asp-action="Delete" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+                            <button type="submit" class="btn btn-danger px-4">Evet, Programı Sil</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

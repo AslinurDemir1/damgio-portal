@@ -17,27 +17,27 @@ Branch: `aslinur` → PR → Zehra review eder.
 - [x] Model kısıtlamaları ve doğrulama kurallarının (`Shop`, `LoyaltyProgram`, `StampCard`) incelenmesi
 - [x] Zehra için CRUD ViewModelleri (`ShopInputModel`, `ProgramInputModel`) ve validasyon sözleşmelerinin hazırlanması
 - [x] 2. Hafta video senaryosu `docs/videos/Hafta02.md`
-- [ ] Zehra'nın açtığı CRUD PR'larının incelenmesi (D11: merge commit) ve entegrasyonu
+- [x] Zehra'nın açtığı CRUD PR'larının incelenmesi (D11: merge commit) ve entegrasyonu
 
 ## Zehra — MVC CRUD ve Form Doğrulama (Validation)
 
 Branch: `zehra` → PR → Aslınur review eder.
 
-- [ ] `ShopsController` (MVC Controller — `[Authorize(Roles = Roles.Admin)]`):
+- [x] `ShopsController` (MVC Controller — `[Authorize(Roles = Roles.Admin)]`):
   - `Index`: Tüm işletmeleri listeleme (aktiflik rozeti, slug, program sayısı)
   - `Create`: Yeni işletme ekleme (otomatik slug tamamlama / elle slug girişi)
   - `Edit`: İşletme bilgilerini ve aktiflik durumunu güncelleme
   - `Details`: İşletme detayları ve bağlı programların özeti
   - `Delete`: İşletmeyi silme veya pasife alma
-- [ ] `ProgramsController` (MVC Controller — `[Authorize(Roles = Roles.Admin)]`):
+- [x] `ProgramsController` (MVC Controller — `[Authorize(Roles = Roles.Admin)]`):
   - Belirli bir işletmeye bağlı LoyaltyProgram oluşturma (`ShopId`, `Name`, `RequiredStamps`, `RewardName`, `StampCooldownSeconds`)
   - Program düzenleme ve listeleme
-- [ ] Form Doğrulamaları (DataAnnotations + UI):
+- [x] Form Doğrulamaları (DataAnnotations + UI):
   - `ShopInputModel` / `ProgramInputModel` üzerinde zorunlu alanlar, metin uzunlukları, sayı aralıkları (`[Range(1, 50)]`)
   - İstemci taraflı anlık doğrulama (`_ValidationScriptsPartial`, jQuery Validate)
   - Sunucu taraflı doğrulama (`ModelState.IsValid`) ve model state hata mesajları
   - Slug çakışması ve rezerve slug hata mesajlarının formda gösterilmesi
-- [ ] `Views/Shared/_Layout.cshtml`: Admin rolü için üst menüye "İşletmeler" ve "Programlar" bağlantılarının eklenmesi
+- [x] `Views/Shared/_Layout.cshtml`: Admin rolü için üst menüye "İşletmeler" ve "Programlar" bağlantılarının eklenmesi
 
 ## Hafta Sonu Kabul Kriterleri
 

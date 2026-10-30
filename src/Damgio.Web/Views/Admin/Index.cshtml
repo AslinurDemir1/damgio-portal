@@ -1,12 +1,64 @@
 @{
-    ViewData["Title"] = "Admin Paneli";
+    ViewData["Title"] = "Yönetim Paneli";
 }
 
-<div class="container mt-5">
-    <div class="alert alert-success shadow p-5 text-center">
-        <h1 class="display-4 text-success">Admin Paneline Hoş Geldiniz!</h1>
-        <p class="lead mt-3">Bu sayfayı yalnızca Admin rolüne sahip kullanıcılar görebilir.</p>
-        <hr>
-        <a class="btn btn-primary mt-2" asp-controller="Home" asp-action="Index">Ana Sayfaya Dön</a>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">Damgio Yönetim Paneli</h1>
+                    <p class="text-muted mb-0">Hoş geldiniz, <strong>@User.Identity?.Name</strong> (Yönetici)</p>
+                </div>
+                <span class="badge bg-success px-3 py-2 fs-6">Admin Yetkisi Aktif</span>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm border-0 border-start border-primary border-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h3 class="h5 mb-0 fw-bold">İşletme Yönetimi</h3>
+                                <span class="fs-3">☕</span>
+                            </div>
+                            <p class="text-muted mb-4">
+                                Sisteme yeni kafeler ve şubeler ekleyin, URL slug adreslerini belirleyin ve şube detaylarını yönetin.
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a asp-controller="Shops" asp-action="Index" class="btn btn-primary">İşletmeleri Listele</a>
+                                <a asp-controller="Shops" asp-action="Create" class="btn btn-outline-primary">+ Yeni İşletme</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm border-0 border-start border-info border-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h3 class="h5 mb-0 fw-bold">Damga Programları</h3>
+                                <span class="fs-3">🎯</span>
+                            </div>
+                            <p class="text-muted mb-4">
+                                Şubelere özel damga hedefleri (ör. 7+1), ödül tanımları ve sahteciliği önleyen damga soğuma sürelerini yapılandırın.
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a asp-controller="Programs" asp-action="Index" class="btn btn-info text-white">Programları Listele</a>
+                                <a asp-controller="Programs" asp-action="Create" class="btn btn-outline-info">+ Yeni Program</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 bg-light p-4 text-center">
+                <p class="text-muted mb-2 small">
+                    Damgio Portalı &bull; BLM4581 Ağ Tabanlı Teknolojiler ve Uygulamaları &bull; 2. Hafta Teslimi
+                </p>
+                <div>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-link btn-sm text-decoration-none">Ana Sayfaya Dön</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,0 +1,95 @@
+@model Damgio.Core.Entities.Shop
+
+@{
+    ViewData["Title"] = Model.Name + " - İşletme Detayı";
+}
+
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">İşletmeler</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h2 class="h5 mb-0">İşletme Bilgileri</h2>
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Aktif</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Pasif</span>
+                    }
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4 text-muted">İşletme Adı:</dt>
+                        <dd class="col-sm-8 fw-bold">@Model.Name</dd>
+
+                        <dt class="col-sm-4 text-muted">Müşteri URL:</dt>
+                        <dd class="col-sm-8">
+                            <code>/s/@Model.Slug</code>
+                        </dd>
+
+                        <dt class="col-sm-4 text-muted">Adres:</dt>
+                        <dd class="col-sm-8">@(string.IsNullOrWhiteSpace(Model.Address) ? "Belirtilmemiş" : Model.Address)</dd>
+
+                        <dt class="col-sm-4 text-muted">Kayıt Tarihi:</dt>
+                        <dd class="col-sm-8">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+                    </dl>
+                </div>
+                <div class="card-footer bg-white d-flex gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">Düzenle</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-sm">Sil</a>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-sm ms-auto">Listeye Dön</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h2 class="h5 mb-0">Damga Programları (@Model.Programs.Count)</h2>
+                    <a asp-controller="Programs" asp-action="Create" asp-route-shopId="@Model.Id" class="btn btn-sm btn-primary">
+                        + Yeni Program Ekle
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    @if (!Model.Programs.Any())
+                    {
+                        <div class="p-4 text-center text-muted">
+                            Bu işletmeye bağlı henüz bir damga programı yok.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var prog in Model.Programs)
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">@prog.Name</h6>
+                                        <p class="mb-1 text-muted small">
+                                            <strong>Hedef:</strong> @prog.RequiredStamps Damga &bull; 
+                                            <strong>Ödül:</strong> @prog.RewardName &bull; 
+                                            <strong>Soğuma:</strong> @prog.StampCooldownSeconds sn
+                                        </p>
+                                    </div>
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-controller="Programs" asp-action="Edit" asp-route-id="@prog.Id" class="btn btn-outline-primary">Düzenle</a>
+                                        <a asp-controller="Programs" asp-action="Delete" asp-route-id="@prog.Id" class="btn btn-outline-danger">Sil</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
