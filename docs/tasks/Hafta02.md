@@ -21,7 +21,7 @@ Branch: `feat/slug-and-models` → PR → Zehra review eder.
 
 ## Zehra — MVC CRUD ve Form Doğrulama (Validation)
 
-Branch: `feat/admin-crud-shops` ve `feat/admin-crud-programs` → PR → Aslınur review eder.
+Branch: `zehra` → PR → Aslınur review eder.
 
 - [ ] `ShopsController` (MVC Controller — `[Authorize(Roles = Roles.Admin)]`):
   - `Index`: Tüm işletmeleri listeleme (aktiflik rozeti, slug, program sayısı)
