@@ -3,6 +3,7 @@ using Damgio.Infrastructure.Identity;
 using Damgio.Web.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Damgio.Core.Constants;
 
 namespace Damgio.Web.Controllers;
 
@@ -38,12 +39,24 @@ public class AccountController : Controller
 
         var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
 
-        if (result.Succeeded)
+              if (result.Succeeded)
         {
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            // Kayıt olan herkese varsayılan olarak Customer rolü atanıyor
+            var roleResult = await _userManager.AddToRoleAsync(user, Roles.Customer);
+
+            if (!roleResult.Succeeded)
             {
-                return Redirect(returnUrl);
+                await _userManager.DeleteAsync(user);
+
+                foreach (var error in roleResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return View(model);
             }
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
             return RedirectToAction("Index", "Home");
         }
 
@@ -81,7 +94,19 @@ public class AccountController : Controller
         if (result.Succeeded)
         {
             // Kayıt olan herkese varsayılan olarak Customer rolü atanıyor
-            await _userManager.AddToRoleAsync(user, "Customer");
+          var roleResult = await _userManager.AddToRoleAsync(user, Roles.Customer);
+
+if (!roleResult.Succeeded)
+{
+    await _userManager.DeleteAsync(user);
+
+    foreach (var error in roleResult.Errors)
+    {
+        ModelState.AddModelError(string.Empty, error.Description);
+    }
+
+    return View(model);
+}
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             return RedirectToAction("Index", "Home");
