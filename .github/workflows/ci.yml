@@ -43,7 +43,7 @@ jobs:
       - name: Apply migrations to a clean database
         run: |
           dotnet tool install --global dotnet-ef
-          dotnet ef database update --project src/Damgio.Infrastructure --startup-project src/Damgio.Web -c Release --no-build
+          dotnet ef database update --project src/Damgio.Infrastructure --startup-project src/Damgio.Web --configuration Release --no-build
 
       - name: Test
         run: dotnet test --no-build -c Release --verbosity normal
