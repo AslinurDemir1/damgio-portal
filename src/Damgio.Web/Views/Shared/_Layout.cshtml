@@ -57,6 +57,12 @@
                     <ul class="navbar-nav ms-auto">
                         @if (SignInManager.IsSignedIn(User))
                         {
+@if (User.IsInRole(Roles.Admin))
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Admin Paneli</a>
+    </li>
+}
                             <li class="nav-item">
                                 <span class="nav-link text-dark">@User.Identity?.Name</span>
                             </li>
