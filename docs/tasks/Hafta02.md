@@ -4,7 +4,7 @@
 
 ## Aslınur — Modeller, Slug Yönetimi ve Testler
 
-Branch: `feat/slug-and-models` → PR → Zehra review eder.
+Branch: `aslinur` → PR → Zehra review eder.
 
 - [x] URL için `SlugHelper` sınıfı (`Damgio.Core/Common/SlugHelper.cs`):
   - Türkçe karakter desteği (`ç->c`, `ğ->g`, `ı->i`, `ö->o`, `ş->s`, `ü->u`, `İ/I->i`)
