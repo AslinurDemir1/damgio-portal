@@ -1,0 +1,474 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Damgio API",
+    "description": "Damgio stamp-card Web API — used by the web portal and the iOS app.",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/StampCards": {
+      "get": {
+        "tags": [
+          "StampCards"
+        ],
+        "summary": "Tüm damga kartlarını listeler. İsteğe bağlı olarak kullanıcı, program veya işletmeye göre filtrelenebilir.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "Filtrelenecek müşteri kullanıcı ID'si (opsiyonel)",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "programId",
+            "in": "query",
+            "description": "Filtrelenecek program ID'si (opsiyonel)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "shopId",
+            "in": "query",
+            "description": "Filtrelenecek işletme ID'si (opsiyonel)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Kartlar başarıyla listelendi",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StampCardDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "StampCards"
+        ],
+        "summary": "Bir müşteri için belirli bir sadakat programında yeni bir damga kartı oluşturur.",
+        "requestBody": {
+          "description": "Kart oluşturma parametreleri (UserId, ProgramId, InitialStamps)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStampCardRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Kart başarıyla oluşturuldu",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StampCardDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz parametreler veya pasif program/işletme",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kullanıcı veya program bulunamadı",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Kullanıcı bu programda zaten bir karta sahip",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/StampCards/{id}": {
+      "get": {
+        "tags": [
+          "StampCards"
+        ],
+        "summary": "Belirtilen ID'ye sahip damga kartının detaylarını ve geçmiş işlem olaylarını getirir.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Damga kartı tekil kimliği",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Kart detayları başarıyla getirildi",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StampCardDetailDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Belirtilen ID ile kart bulunamadı",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "StampCards"
+        ],
+        "summary": "Mevcut bir damga kartını günceller (damga sayısı düzeltmesi veya manuel güncelleme).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Güncellenecek damga kartı ID'si",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Güncellenecek damga değerleri",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStampCardRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Kart başarıyla güncellendi",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StampCardDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz damga sayısı veya doğrulama hatası",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kart bulunamadı",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "StampCards"
+        ],
+        "summary": "Bir damga kartını ve bağlı işlem geçmişini sistemden siler.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Silinecek kart ID'si",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Kart başarıyla silindi"
+          },
+          "404": {
+            "description": "Kart bulunamadı",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "StampCardDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userFullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "programId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "programName": {
+            "type": "string"
+          },
+          "shopId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shopName": {
+            "type": "string"
+          },
+          "shopSlug": {
+            "type": "string"
+          },
+          "currentStamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requiredStamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rewardName": {
+            "type": "string"
+          },
+          "lifetimeStamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastStampAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "programId",
+          "programName",
+          "shopId",
+          "shopName",
+          "shopSlug",
+          "currentStamps",
+          "requiredStamps",
+          "rewardName",
+          "lifetimeStamps",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "StampEventDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "stampCardId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "actorUserId": {
+            "type": "string",
+            "nullable": true
+          },
+          "actorUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "deviceId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "stampCardId",
+          "type",
+          "source",
+          "createdAt"
+        ]
+      },
+      "StampCardDetailDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StampCardDto"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "events": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/StampEventDto"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "CreateStampCardRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "programId": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "initialStamps": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0,
+            "maximum": 50,
+            "default": 0
+          }
+        },
+        "required": [
+          "userId",
+          "programId"
+        ]
+      },
+      "UpdateStampCardRequest": {
+        "type": "object",
+        "properties": {
+          "currentStamps": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0,
+            "maximum": 50
+          },
+          "lifetimeStamps": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0,
+            "maximum": 100000,
+            "nullable": true
+          }
+        },
+        "required": [
+          "currentStamps"
+        ]
+      },
+      "ApiErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+    }
+  }
+}

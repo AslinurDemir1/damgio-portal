@@ -18,11 +18,11 @@
                     <div class="card h-100 shadow-sm border-0 border-start border-primary border-4">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h3 class="h5 mb-0 fw-bold">İşletme Yönetimi</h3>
+                                <h3 class="h5 mb-0 fw-bold">İşletme ve Personel Yönetimi</h3>
                                 <span class="fs-3">☕</span>
                             </div>
                             <p class="text-muted mb-4">
-                                Sisteme yeni kafeler ve şubeler ekleyin, URL slug adreslerini belirleyin ve şube detaylarını yönetin.
+                                Sisteme yeni kafeler ve şubeler ekleyin, şube detaylarından kasiyer/personel (ShopMembers) ataması yapın ve yönetin.
                             </p>
                             <div class="d-flex gap-2">
                                 <a asp-controller="Shops" asp-action="Index" class="btn btn-primary">İşletmeleri Listele</a>
@@ -49,11 +49,36 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-12">
+                    <div class="card shadow-sm border-0 border-start border-warning border-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h3 class="h5 mb-1 fw-bold">Web API & Swagger (v1)</h3>
+                                    <p class="text-muted mb-0 small">iOS istemcisi ve entegrasyonlar için RESTful damga kartı CRUD uç noktaları</p>
+                                </div>
+                                <span class="fs-3">⚡</span>
+                            </div>
+                            <p class="text-muted mb-3">
+                                <code>/api/v1/stampcards</code> üzerinden kart sorgulama, oluşturma, damga ekleme/güncelleme ve silme işlemleri aktiftir. Etkileşimli Swagger UI arayüzü ile test edebilirsiniz.
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="/swagger" target="_blank" class="btn btn-warning text-dark fw-bold">
+                                    Swagger Dokümantasyonunu Aç &rarr;
+                                </a>
+                                <a href="/api/v1/stampcards" target="_blank" class="btn btn-outline-secondary">
+                                    Ham JSON API (/api/v1/stampcards)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="card shadow-sm border-0 bg-light p-4 text-center">
                 <p class="text-muted mb-2 small">
-                    Damgio Portalı &bull; BLM4581 Ağ Tabanlı Teknolojiler ve Uygulamaları &bull; 2. Hafta Teslimi
+                    Damgio Portalı &bull; BLM4581 Ağ Tabanlı Teknolojiler ve Uygulamaları &bull; 3. Hafta: Web API (Swagger) & ShopMembers
                 </p>
                 <div>
                     <a asp-controller="Home" asp-action="Index" class="btn btn-link btn-sm text-decoration-none">Ana Sayfaya Dön</a>
