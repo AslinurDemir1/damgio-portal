@@ -1,23 +1,40 @@
-@model Damgio.Core.Entities.Shop
+@model Damgio.Web.Models.Admin.ShopDetailsViewModel
 
 @{
-    ViewData["Title"] = Model.Name + " - İşletme Detayı";
+    ViewData["Title"] = Model.Shop.Name + " - İşletme Detayı";
 }
 
 <div class="container py-4">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a asp-action="Index">İşletmeler</a></li>
-            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Shop.Name</li>
         </ol>
     </nav>
 
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+    }
+
     <div class="row g-4">
+        <!-- Sol Kolon: İşletme Bilgileri -->
         <div class="col-lg-5">
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                     <h2 class="h5 mb-0">İşletme Bilgileri</h2>
-                    @if (Model.IsActive)
+                    @if (Model.Shop.IsActive)
                     {
                         <span class="badge bg-success">Aktif</span>
                     }
@@ -29,38 +46,71 @@
                 <div class="card-body">
                     <dl class="row mb-0">
                         <dt class="col-sm-4 text-muted">İşletme Adı:</dt>
-                        <dd class="col-sm-8 fw-bold">@Model.Name</dd>
+                        <dd class="col-sm-8 fw-bold">@Model.Shop.Name</dd>
 
                         <dt class="col-sm-4 text-muted">Müşteri URL:</dt>
                         <dd class="col-sm-8">
-                            <code>/s/@Model.Slug</code>
+                            <code>/s/@Model.Shop.Slug</code>
                         </dd>
 
                         <dt class="col-sm-4 text-muted">Adres:</dt>
-                        <dd class="col-sm-8">@(string.IsNullOrWhiteSpace(Model.Address) ? "Belirtilmemiş" : Model.Address)</dd>
+                        <dd class="col-sm-8">@(string.IsNullOrWhiteSpace(Model.Shop.Address) ? "Belirtilmemiş" : Model.Shop.Address)</dd>
 
                         <dt class="col-sm-4 text-muted">Kayıt Tarihi:</dt>
-                        <dd class="col-sm-8">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+                        <dd class="col-sm-8">@Model.Shop.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
                     </dl>
                 </div>
                 <div class="card-footer bg-white d-flex gap-2">
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">Düzenle</a>
-                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-sm">Sil</a>
+                    <a asp-action="Edit" asp-route-id="@Model.Shop.Id" class="btn btn-outline-primary btn-sm">Düzenle</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Shop.Id" class="btn btn-outline-danger btn-sm">Sil</a>
                     <a asp-action="Index" class="btn btn-outline-secondary btn-sm ms-auto">Listeye Dön</a>
+                </div>
+            </div>
+
+            <!-- Yeni Personel / Kasiyer Atama Kartı -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3">
+                    <h2 class="h5 mb-0">Personel / Kasiyer Ata</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddMember" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="ShopId" value="@Model.Shop.Id" />
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Kullanıcı E-Postası</label>
+                            <input type="email" name="UserEmail" class="form-control" placeholder="kasiyer@damgio.com" required />
+                            <div class="form-text small">Kullanıcının sisteme daha önce kayıt olmuş olması gerekmektedir.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Yetki / Rol</label>
+                            <select name="Role" class="form-select">
+                                <option value="@Damgio.Core.Enums.ShopRole.Cashier">Kasiyer (Cashier)</option>
+                                <option value="@Damgio.Core.Enums.ShopRole.Owner">Şube Sahibi (Owner)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-sm w-100">
+                            + Personel Olarak Ekle
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
 
+        <!-- Sağ Kolon: Programlar ve Personel Listesi -->
         <div class="col-lg-7">
-            <div class="card shadow-sm border-0">
+            <!-- Damga Programları -->
+            <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                    <h2 class="h5 mb-0">Damga Programları (@Model.Programs.Count)</h2>
-                    <a asp-controller="Programs" asp-action="Create" asp-route-shopId="@Model.Id" class="btn btn-sm btn-primary">
+                    <h2 class="h5 mb-0">Damga Programları (@Model.Shop.Programs.Count)</h2>
+                    <a asp-controller="Programs" asp-action="Create" asp-route-shopId="@Model.Shop.Id" class="btn btn-sm btn-primary">
                         + Yeni Program Ekle
                     </a>
                 </div>
                 <div class="card-body p-0">
-                    @if (!Model.Programs.Any())
+                    @if (!Model.Shop.Programs.Any())
                     {
                         <div class="p-4 text-center text-muted">
                             Bu işletmeye bağlı henüz bir damga programı yok.
@@ -69,7 +119,7 @@
                     else
                     {
                         <div class="list-group list-group-flush">
-                            @foreach (var prog in Model.Programs)
+                            @foreach (var prog in Model.Shop.Programs)
                             {
                                 <div class="list-group-item d-flex justify-content-between align-items-center py-3">
                                     <div>
@@ -86,6 +136,65 @@
                                     </div>
                                 </div>
                             }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- İşletme Personelleri (ShopMembers) -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3">
+                    <h2 class="h5 mb-0">Kasiyerler ve Personel (@Model.Members.Count)</h2>
+                </div>
+                <div class="card-body p-0">
+                    @if (!Model.Members.Any())
+                    {
+                        <div class="p-4 text-center text-muted">
+                            Bu işletmeye henüz bir kasiyer veya şube sahibi atanmamış.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Personel</th>
+                                        <th>E-Posta</th>
+                                        <th>Rol</th>
+                                        <th>Kayıt Tarihi</th>
+                                        <th class="text-end">İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var member in Model.Members)
+                                    {
+                                        <tr>
+                                            <td class="fw-bold">@(member.FullName ?? "İsimsiz Kullanıcı")</td>
+                                            <td><code>@member.Email</code></td>
+                                            <td>
+                                                @if (member.Role == Damgio.Core.Enums.ShopRole.Owner)
+                                                {
+                                                    <span class="badge bg-warning text-dark">Şube Sahibi</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-info text-dark">Kasiyer</span>
+                                                }
+                                            </td>
+                                            <td class="small text-muted">@member.CreatedAt.ToString("dd.MM.yyyy")</td>
+                                            <td class="text-end">
+                                                <form asp-action="RemoveMember" method="post" class="d-inline" onsubmit="return confirm('Bu personeli işletmeden çıkarmak istediğinize emin misiniz?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="shopId" value="@Model.Shop.Id" />
+                                                    <input type="hidden" name="memberId" value="@member.Id" />
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm">Çıkar</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     }
                 </div>

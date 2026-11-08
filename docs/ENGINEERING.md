@@ -85,14 +85,14 @@ Reserved slugs: `admin`, `api`, `desk`, `s`, `account`, `login`, `swagger`.
 | POST | `/api/v1/tap` | Customer |
 
 Error codes: `UNAUTHENTICATED`, `PERMISSION_DENIED`, `NOT_FOUND`, `SHOP_INACTIVE`,
-`INVALID_DEVICE`, `COOLDOWN`, `SLUG_TAKEN`, `ALREADY_USED`, `RATE_LIMITED`, `VALIDATION`.
+`INVALID_DEVICE`, `COOLDOWN`, `SLUG_TAKEN`, `ALREADY_USED`, `RATE_LIMITED`, `VALIDATION`, `ALREADY_EXISTS`.
 
 ## 6. Course requirements checklist
 
 - [x] ASP.NET Core MVC
 - [x] PostgreSQL + EF Core + migrations
 - [x] ≥ 4–5 tables, ≥ 1 one-to-many
-- [ ] Web API full CRUD + Swagger (W3)
+- [x] Web API full CRUD + Swagger (W3)
 - [x] Form validation (W2)
 - [x] Login + ≥ 2 roles (W1–W2, Zehra)
 - [ ] Admin panel (W3–W7)
@@ -103,6 +103,17 @@ Error codes: `UNAUTHENTICATED`, `PERMISSION_DENIED`, `NOT_FOUND`, `SHOP_INACTIVE
 ## 7. Work log
 
 Newest first.
+
+### 2026-11-06 — Week 3 completion: StampCards Web API (Full CRUD + Swagger) & ShopMembers (Aslınur & Zehra)
+
+- Web API: `StampCardsController` (`/api/v1/stampcards`) implemented with complete RESTful CRUD operations (GET all with filters, GET by id with event history, POST create, PUT update with reward cycle D08, DELETE).
+- OpenAPI / Swagger: Swashbuckle OpenAPI v1 configured with XML documentation comments, available at `/swagger`.
+- Contract: Generated and published `contracts/openapi-v1.json` for the iOS application (`zehravural1/damgio-ios`).
+- ShopMembers: Staff/Cashier management integrated into Admin Shop Details (`/Shops/Details/{id}`); support for adding and removing shop members with role assignments (`Cashier`, `Owner`) and uniqueness validation.
+- Unit Tests: 59 unit tests passing (`dotnet test`), verifying DTO validations, reward cycle resets, cooldown logic, and member constraints.
+- Admin UI & Layout: Direct shortcuts to Swagger UI and raw API endpoints added to Admin Dashboard and main navigation.
+- Documentation: `docs/tasks/Hafta03.md` and `docs/videos/Hafta03.md` created.
+- **Next:** W4 — Customer card display screen (`/s/{slug}`), mobile-friendly UI and NFC tap flow.
 
 ### 2026-10-31 — Week 2 completion: Admin CRUD for Shops and Programs (Aslınur & Zehra)
 

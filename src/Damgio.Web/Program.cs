@@ -1,6 +1,6 @@
+using System.Reflection;
 using Damgio.Infrastructure;
 using Damgio.Infrastructure.Data;
-
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,11 +25,26 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Description = "Damgio stamp-card Web API — used by the web portal and the iOS app.",
     });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath);
+    }
 });
 
 var app = builder.Build();
-// Uygulama başlarken Seeder'ı tetikle
-await DbSeeder.SeedAsync(app.Services);
+
+try
+{
+    // Uygulama başlarken Seeder'ı tetikle
+    await DbSeeder.SeedAsync(app.Services);
+}
+catch (Exception ex)
+{
+    app.Logger.LogWarning(ex, "Veritabanı tohumlama (DbSeeder) atlandı: {Message}", ex.Message);
+}
 
 if (app.Environment.IsDevelopment())
 {
