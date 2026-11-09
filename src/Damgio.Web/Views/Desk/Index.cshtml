@@ -1,0 +1,172 @@
+
+@model Damgio.Web.Models.Desk.DeskIndexViewModel
+
+@{
+    ViewData["Title"] = "Kasiyer Paneli";
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Kasiyer Paneli</h2>
+        <p class="text-muted">
+            Müşteri kartlarını bulun, damga ve ödül işlemlerini yönetin.
+        </p>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Müşteri Ara</h5>
+
+            <form asp-controller="Desk" asp-action="Index" method="get">
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <label for="shopId" class="form-label">
+                            İşletme
+                        </label>
+
+                        <select id="shopId"
+                                name="shopId"
+                                class="form-select"
+                                required>
+                            <option value="">İşletme seçiniz</option>
+
+                            @foreach (var shop in Model.Shops)
+                            {
+                                <option value="@shop.Id"
+                                        selected="@(Model.SelectedShopId == shop.Id)">
+                                    @shop.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="query" class="form-label">
+                            Müşteri bilgisi
+                        </label>
+
+                        <input id="query"
+                               name="query"
+                               type="text"
+                               class="form-control"
+                               value="@Model.SearchQuery"
+                               placeholder="Telefon, e-posta veya kart numarası"
+                               maxlength="100" />
+                    </div>
+
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            <i class="bi bi-search"></i>
+                            Ara
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.SearchQuery))
+    {
+        <div class="mb-3">
+            <h5>Arama Sonuçları</h5>
+            <span class="text-muted">
+                @Model.Cards.Count müşteri kartı bulundu.
+            </span>
+        </div>
+
+        @if (Model.Cards.Count == 0)
+        {
+            <div class="alert alert-info">
+                Aradığınız kriterlere uygun müşteri kartı bulunamadı.
+            </div>
+        }
+        else
+        {
+            <div class="row g-3">
+
+                @foreach (var card in Model.Cards)
+                {
+                    var progress = card.RequiredStamps > 0
+                        ? Math.Min(100, card.CurrentStamps * 100 / card.RequiredStamps)
+                        : 0;
+
+                    <div class="col-12 col-lg-6">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="fw-bold mb-1">
+                                            @card.CustomerName
+                                        </h5>
+                                        <span class="text-muted">
+                                            Kart #@card.CardId
+                                        </span>
+                                    </div>
+
+                                    <span class="badge bg-primary align-self-start">
+                                        @card.ShopName
+                                    </span>
+                                </div>
+
+                                <hr />
+
+                                <p class="mb-1">
+                                    <strong>E-posta:</strong>
+                                    @(card.Email ?? "Belirtilmemiş")
+                                </p>
+
+                                <p class="mb-3">
+                                    <strong>Telefon:</strong>
+                                    @(card.PhoneNumber ?? "Belirtilmemiş")
+                                </p>
+
+                                <p class="mb-1">
+                                    <strong>Program:</strong>
+                                    @card.ProgramName
+                                </p>
+
+                                <p class="mb-2">
+                                    <strong>Damga:</strong>
+                                    @card.CurrentStamps / @card.RequiredStamps
+                                </p>
+
+                                <div class="progress mb-3" style="height: 10px;">
+                                    <div class="progress-bar"
+                                         role="progressbar"
+                                         style="width: @(progress)%"
+                                         aria-valuenow="@progress"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100">
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between flex-wrap gap-2">
+                                    <span class="text-muted">
+                                        Toplam damga: @card.LifetimeStamps
+                                    </span>
+
+                                    <span class="badge bg-success">
+                                        Kullanılabilir ödül: @card.AvailableRewards
+                                    </span>
+                                </div>
+
+                                <div class="mt-3">
+                                    <strong>Ödül:</strong>
+                                    @card.RewardName
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        }
+    }
+
+</div>
