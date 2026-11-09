@@ -1,0 +1,20 @@
+@model Damgio.Core.Entities.Shop
+
+@{
+    ViewData["Title"] = "Aktif Program Yok";
+}
+
+<div class="mobile-card-container text-center py-5">
+    <div class="damgio-card">
+        <div class="fs-1 mb-3">📋</div>
+        <h3 class="fw-bold mb-2">@Model.Name</h3>
+        <p class="text-muted">
+            Bu işletmeye ait henüz aktif bir sadakat veya damga kartı programı tanımlanmamıştır.
+        </p>
+        <div class="mt-4">
+            <a asp-controller="Home" asp-action="Index" class="damgio-btn-primary">
+                Ana Sayfaya Dön
+            </a>
+        </div>
+    </div>
+</div>

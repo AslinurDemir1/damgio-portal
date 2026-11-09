@@ -254,6 +254,100 @@
           }
         }
       }
+    },
+    "/api/v1/me/cards": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Oturum açmış müşterinin sahip olduğu tüm damga kartlarını listeler.",
+        "responses": {
+          "200": {
+            "description": "Kartlar başarıyla getirildi",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "": "#/components/schemas/CustomerCardSummaryDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Kullanıcı kimliği doğrulanmamış",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tap": {
+      "post": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "NFC sayaç tokmak dokunma uç noktası (iOS ve API istemcileri için).",
+        "requestBody": {
+          "description": "İşletme slug değeri ve cihaz gizli anahtarı",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "": "#/components/schemas/TapRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Damga veya ödül başarıyla işlendi",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "": "#/components/schemas/TapResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Doğrulama veya cihaz hatası",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Kullanıcı kimliği doğrulanmamış",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Soğuma süresi aktif (Cooldown)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -467,6 +561,140 @@
         "required": [
           "code",
           "message"
+        ]
+      },
+      "CustomerCardSummaryDto": {
+        "type": "object",
+        "properties": {
+          "cardId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shopId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shopName": {
+            "type": "string"
+          },
+          "shopSlug": {
+            "type": "string"
+          },
+          "programId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "programName": {
+            "type": "string"
+          },
+          "rewardName": {
+            "type": "string"
+          },
+          "currentStamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requiredStamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lifetimeStamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastStampAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "canStampNow": {
+            "type": "boolean"
+          },
+          "cooldownSeconds": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "cardId",
+          "shopId",
+          "shopName",
+          "shopSlug",
+          "programId",
+          "programName",
+          "rewardName",
+          "currentStamps",
+          "requiredStamps",
+          "lifetimeStamps",
+          "canStampNow",
+          "cooldownSeconds"
+        ]
+      },
+      "TapRequest": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "key"
+        ]
+      },
+      "TapResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "rewardEarned": {
+            "type": "boolean"
+          },
+          "currentStamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requiredStamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lifetimeStamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rewardName": {
+            "type": "string"
+          },
+          "cardId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shopName": {
+            "type": "string"
+          },
+          "remainingCooldownSeconds": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "success",
+          "message",
+          "rewardEarned",
+          "currentStamps",
+          "requiredStamps",
+          "lifetimeStamps",
+          "rewardName",
+          "cardId",
+          "shopName",
+          "remainingCooldownSeconds"
         ]
       }
     }

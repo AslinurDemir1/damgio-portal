@@ -36,6 +36,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/s/kadikoy-damgio-cafe"><span class="badge bg-success me-1">Hafta 4</span>Müşteri Kartı (/s)</a>
+                        </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole(Roles.Admin))
                         {
                             <li class="nav-item">

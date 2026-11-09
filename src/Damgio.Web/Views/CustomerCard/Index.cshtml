@@ -1,0 +1,216 @@
+@model Damgio.Web.Models.Customer.CustomerCardViewModel
+
+@{
+    ViewData["Title"] = $"{Model.ShopName} — Damga Kartı";
+}
+
+<div class="mobile-card-container">
+    @* Bildirimler (Başarı, Uyarı, Hata) *@
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm" role="alert">
+            <strong>Hata:</strong> @Model.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.WarningMessage))
+    {
+        <div class="alert alert-warning alert-dismissible fade show rounded-4 shadow-sm" role="alert">
+            <strong>Dikkat:</strong> @Model.WarningMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+    }
+
+    @if (Model.RewardEarnedNotice || !string.IsNullOrEmpty(Model.StatusMessage))
+    {
+        <div class="celebration-box shadow-sm">
+            @if (Model.RewardEarnedNotice)
+            {
+                <div class="fs-1 mb-1">🎉 🎁 ☕</div>
+                <h4 class="fw-bold text-success mb-2">Tebrikler, Ödül Kazandınız!</h4>
+                <p class="mb-0 text-dark"><strong>@Model.RewardName</strong> hediyeniz hazır! Bir sonraki siparişinizde kasaya gösterebilirsiniz.</p>
+            }
+            else
+            {
+                <div class="fs-2 mb-1">✨</div>
+                <h5 class="fw-bold text-dark mb-1">Damga Eklendi</h5>
+                <p class="mb-0 text-muted">@Model.StatusMessage</p>
+            }
+        </div>
+    }
+
+    @* Ana Dijital Damga Kartı *@
+    <div class="damgio-card">
+        @* Başlık & İşletme Bilgisi *@
+        <div class="damgio-card-header text-center">
+            <span class="damgio-badge-cafe mb-2">☕ Damga Kartı</span>
+            <h2 class="h3 fw-bold mb-1" style="color: var(--damgio-forest-deep);">@Model.ShopName</h2>
+            @if (!string.IsNullOrWhiteSpace(Model.ShopAddress))
+            {
+                <p class="small text-muted mb-2">📍 @Model.ShopAddress</p>
+            }
+            <div class="d-flex align-items-center justify-content-center gap-2">
+                <span class="badge bg-light text-dark border">@Model.ProgramName</span>
+                <span class="damgio-badge-reward">Hedef: @Model.RequiredStamps Damga</span>
+            </div>
+        </div>
+
+        @if (Model.IsAuthenticated)
+        {
+            @* Müşteri Özeti *@
+            <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+                <div>
+                    <span class="text-muted small">Müşteri</span>
+                    <div class="fw-bold">@(Model.CustomerName ?? Model.CustomerEmail)</div>
+                </div>
+                <div class="text-end">
+                    <span class="text-muted small">Kazanılan Ödüller</span>
+                    <div class="fw-bold text-success">@(Model.LifetimeStamps / Math.Max(1, Model.RequiredStamps)) Adet</div>
+                </div>
+            </div>
+
+            @* Damga Izgarası (Stamp Grid) *@
+            <div class="stamp-grid">
+                @for (int i = 1; i <= Model.RequiredStamps; i++)
+                {
+                    var isFilled = i <= Model.CurrentStamps;
+                    <div class="stamp-slot @(isFilled ? "filled" : "empty")">
+                        @if (isFilled)
+                        {
+                            <span class="stamp-icon">☕</span>
+                            <span class="stamp-number">@i</span>
+                        }
+                        else
+                        {
+                            <span class="stamp-number text-muted">@i</span>
+                        }
+                    </div>
+                }
+
+                @* Son +1 Ödül Yuvası *@
+                <div class="stamp-slot reward-slot @(Model.CurrentStamps >= Model.RequiredStamps ? "earned" : "")">
+                    <span class="stamp-icon">🎁</span>
+                    <span class="stamp-number">Ödül</span>
+                </div>
+            </div>
+
+            @* İlerleme Çubuğu *@
+            <div class="my-3">
+                <div class="d-flex justify-content-between small text-muted mb-1">
+                    <span>Mevcut: <strong>@Model.CurrentStamps / @Model.RequiredStamps</strong></span>
+                    <span>Kalan: <strong>@Model.StampsRemaining damga</strong></span>
+                </div>
+                <div class="damgio-progress">
+                    <div class="damgio-progress-bar" style="width: @Model.ProgressPercentage%;"></div>
+                </div>
+            </div>
+
+            @* Ödül Bilgilendirme Kartı *@
+            <div class="p-3 rounded-4 mb-3" style="background-color: var(--damgio-paper-alt); border: 1px solid rgba(59,46,43,0.06);">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="fs-4">🏆</span>
+                    <div>
+                        <div class="small text-muted">Kazanılacak Ödül:</div>
+                        <div class="fw-bold" style="color: var(--damgio-terracotta);">@Model.RewardName</div>
+                    </div>
+                </div>
+            </div>
+
+            @* Soğuma Süresi (Cooldown) Göstergesi *@
+            @if (!Model.CanStampNow && Model.RemainingCooldownSeconds > 0)
+            {
+                <div class="alert alert-secondary text-center small rounded-4 mb-3 py-2" id="cooldownBanner">
+                    ⏱️ Bir sonraki damga için kalan süre:
+                    <strong id="cooldownTimer" data-seconds="@Model.RemainingCooldownSeconds">@Model.RemainingCooldownSeconds sn</strong>
+                </div>
+            }
+
+            @* İşlem Geçmişi Açılır Paneli *@
+            @if (Model.RecentEvents.Count > 0)
+            {
+                <div class="damgio-history-card">
+                    <h6 class="fw-bold small text-muted text-uppercase mb-2">Son Damga Hareketleri</h6>
+                    <ul class="list-unstyled mb-0">
+                        @foreach (var ev in Model.RecentEvents)
+                        {
+                            <li class="d-flex justify-content-between align-items-center py-1 border-bottom border-light">
+                                <div>
+                                    <span class="badge @(ev.TypeName.Contains("Ödül") ? "bg-success" : "bg-secondary") me-1">@ev.TypeName</span>
+                                    <span class="small text-dark">@ev.Description</span>
+                                </div>
+                                <span class="small text-muted">@ev.CreatedAt.ToLocalTime().ToString("dd.MM HH:mm")</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        }
+        else
+        {
+            @* Giriş Yapmamış Ziyaretçi Görünümü *@
+            <div class="text-center py-4">
+                <div class="fs-1 mb-2">📱</div>
+                <h4 class="fw-bold mb-2">Damga Kartınızı Açın</h4>
+                <p class="text-muted small mb-4">
+                    Bu kafede damga toplamak ve <strong>@Model.RewardName</strong> hediyesini kazanmak için giriş yapın veya hemen kaydolun.
+                </p>
+
+                <div class="d-grid gap-2">
+                    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="/s/@Model.ShopSlug" class="damgio-btn-primary">
+                        Giriş Yap ve Kartı Gör
+                    </a>
+                    <a asp-controller="Account" asp-action="Register" asp-route-returnUrl="/s/@Model.ShopSlug" class="btn btn-outline-secondary rounded-pill py-2">
+                        Yeni Hesap Oluştur
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+    @* Geliştirici / Demo NFC Dokunma Simülatörü *@
+    <div class="card mt-4 border-0 shadow-sm rounded-4" style="background-color: #ffffff;">
+        <div class="card-body p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small fw-bold text-uppercase text-muted">⚡ NFC / QR Tokmak Testi (Demo)</span>
+                <span class="badge bg-secondary">BLM4581 Hafta 4</span>
+            </div>
+            <p class="small text-muted mb-2">
+                Masadaki veya kasadaki NFC tokmak cihaza dokunulduğunda <code>/s/@Model.ShopSlug/tap?k=...</code> adresi tetiklenir.
+            </p>
+            <form method="get" action="/s/@Model.ShopSlug/tap" class="d-flex gap-2">
+                <input type="hidden" name="k" value="damgio-tokmak-secret-2026" />
+                <button type="submit" class="damgio-btn-reward w-100 py-2 small fw-bold">
+                    📲 NFC Tokmak Dokunmasını Simüle Et (Damga Bas)
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Geri sayım (Cooldown) sayacı
+        document.addEventListener('DOMContentLoaded', function () {
+            const timerElem = document.getElementById('cooldownTimer');
+            if (timerElem) {
+                let seconds = parseInt(timerElem.getAttribute('data-seconds'), 10);
+                if (seconds > 0) {
+                    const interval = setInterval(function () {
+                        seconds--;
+                        if (seconds <= 0) {
+                            clearInterval(interval);
+                            const banner = document.getElementById('cooldownBanner');
+                            if (banner) {
+                                banner.className = "alert alert-success text-center small rounded-4 mb-3 py-2";
+                                banner.innerHTML = "✅ Damga basmaya hazır!";
+                            }
+                        } else {
+                            timerElem.textContent = seconds + " sn";
+                        }
+                    }, 1000);
+                }
+            }
+        });
+    </script>
+}

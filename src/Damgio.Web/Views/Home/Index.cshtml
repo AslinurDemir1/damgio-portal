@@ -1,8 +1,71 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Damgio — Dijital Damga Kartı Portalı";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="py-4 text-center">
+    <div class="mb-3">
+        <span class="fs-1">☕ 📲 🎁</span>
+    </div>
+    <h1 class="display-5 fw-bold mb-3" style="color: var(--damgio-forest-deep, #2d5e4e);">Damgio Portal</h1>
+    <p class="lead text-muted col-md-8 mx-auto mb-4">
+        NFC ve QR tabanlı, uygulama indirme zorunluluğu olmadan tarayıcıda çalışan dijital damga kartı sistemi.
+        Kafelerde masa veya kasadaki NFC tokmak ile damganızı toplayın, ödülleri kazanın.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap mb-5">
+        <a href="/s/kadikoy-damgio-cafe" class="btn btn-lg rounded-pill px-4 text-white shadow-sm" style="background-color: var(--damgio-forest-deep, #2d5e4e);">
+            📱 Mobil Damga Kartını Gör (/s/...)
+        </a>
+        <a href="/swagger" target="_blank" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+            ⚡ Web API (Swagger)
+        </a>
+    </div>
+
+    @* Haftalık Özellik Kartları *@
+    <div class="row g-4 text-start justify-content-center">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-3" style="background-color: var(--damgio-cream, #fffaf4);">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">4. Hafta</span>
+                    <h5 class="fw-bold">Mobil Kart & NFC Damga Akışı</h5>
+                    <p class="small text-muted mb-3">
+                        Müşterilerin masadaki QR/NFC ile açtığı <code>/s/{slug}</code> mobil kartı, D07 soğuma süresi (180 sn) ve D08 ödül döngüsü kuralı ile NFC tokmak dokunma akışı.
+                    </p>
+                    <a href="/s/kadikoy-damgio-cafe" class="small fw-bold text-decoration-none" style="color: var(--damgio-terracotta, #c26c55);">
+                        Kartı Aç & Damga Bas &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-3" style="background-color: #ffffff;">
+                <div class="card-body">
+                    <span class="badge bg-primary mb-2">3. Hafta</span>
+                    <h5 class="fw-bold">Web API Full CRUD & OpenAPI</h5>
+                    <p class="small text-muted mb-3">
+                        Damga kartları için RESTful CRUD uç noktaları, Swagger/OpenAPI v1 sözleşmesi ve iOS istemcisi (<code>damgio-ios</code>) ile Single Source of Truth sözleşmesi.
+                    </p>
+                    <a href="/swagger" target="_blank" class="small fw-bold text-decoration-none text-primary">
+                        Swagger Dokümantasyonunu Aç &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-3" style="background-color: #ffffff;">
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">1 & 2. Hafta</span>
+                    <h5 class="fw-bold">Yönetim Paneli & Kimlik</h5>
+                    <p class="small text-muted mb-3">
+                        ASP.NET Core Identity çoklu rol yapısı (Admin, Cashier, Customer), işletme ve sadakat programı CRUD yönetimi ve form doğrulama kuralları.
+                    </p>
+                    <a asp-controller="Admin" asp-action="Index" class="small fw-bold text-decoration-none text-dark">
+                        Yönetim Paneline Git &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

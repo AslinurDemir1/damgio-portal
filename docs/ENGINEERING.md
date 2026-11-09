@@ -96,13 +96,26 @@ Error codes: `UNAUTHENTICATED`, `PERMISSION_DENIED`, `NOT_FOUND`, `SHOP_INACTIVE
 - [x] Form validation (W2)
 - [x] Login + ≥ 2 roles (W1–W2, Zehra)
 - [ ] Admin panel (W3–W7)
-- [ ] Mobile-friendly UI (W4, W8)
+- [x] Mobile-friendly UI (W4, W8)
 - [x] README with setup + migration steps
 - [x] No secrets in repo
 
 ## 7. Work log
 
 Newest first.
+
+### 2026-11-09 — Week 4 completion: Mobile-friendly Customer Card (/s/{slug}), NFC/QR Tap Flow & API (Aslınur & Zehra)
+
+- Customer Card Surface: `CustomerCardController` (`/s/{slug}`) implemented with responsive mobile layout, styled using shared design tokens (`design/tokens.json`).
+- Auto-enrollment: Automatically creates a digital stamp card for authenticated customers visiting the shop's URL.
+- NFC Tap Flow: `/s/{slug}/tap?k=...` endpoint handles counter device taps, SHA-256 key hash verification (D09), cooldown checking (D07) and D08 reward cycle resets.
+- Web API Endpoints: `CustomerController` (`/api/v1/me/cards` and `/api/v1/tap`) for iOS client (`damgio-ios`) and mobile apps.
+- OpenAPI Contract: Updated `contracts/openapi-v1.json` with customer card summary and tap endpoints.
+- UI & Interaction: Real-time cooldown countdown timer in JS, animated stamp grid, celebration notice upon reward earn, and demo tap simulator.
+- Seed Data: Demo shop ("Kadıköy Damgio Cafe"), program ("7 Kahveye 1 İkram"), NFC device, demo customer and cashier accounts added to `DbSeeder.cs`.
+- Unit Tests: 79 unit tests passing (`dotnet test`), verifying SHA-256 hashing, tap logic, cooldown enforcement, and auto-enrollment.
+- Documentation: `docs/tasks/Hafta04.md` and `docs/videos/Hafta04.md` completed.
+- **Next:** W5 — Cashier Desk screen (`/Desk`), manual stamp & reward redemption, and metrics reporting.
 
 ### 2026-11-06 — Week 3 completion: StampCards Web API (Full CRUD + Swagger) & ShopMembers (Aslınur & Zehra)
 
